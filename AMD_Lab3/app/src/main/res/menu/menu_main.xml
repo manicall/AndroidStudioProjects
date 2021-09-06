@@ -4,22 +4,46 @@
         android:id="@+id/action_settings"
         android:title="Настройки">
         <menu>
-            <item android:id="@+id/save_settings"
+            <item android:id="@+id/save"
                 android:title="Сохранить" />
-            <item android:id="@+id/open_settings"
+            <item android:id="@+id/open"
                 android:title="Открыть" />
         </menu>
-
     </item>
+
     <item
-        android:id="@+id/action_move"
-        android:title="Переход">
+        android:id="@+id/action_radio"
+        android:title="Радиокнопки">
         <menu>
-            <item android:id="@+id/forward"
-                android:title="Вперед" />
-            <item android:id="@+id/back"
-                android:title="Назад" />
+            <group android:checkableBehavior="single">
+            <item android:id="@+id/cat"
+                android:title="Кошка" />
+            <item android:id="@+id/dog"
+                android:title="Собака" />
+            <item android:id="@+id/parrot"
+                android:title="Попугай" />
+            <item android:id="@+id/hamster"
+                android:title="Хомячок" />
+            </group>
         </menu>
-
     </item>
+
+    <item
+        android:id="@+id/action_check"
+        android:title="Флажки">
+
+        <menu>
+            <group android:checkableBehavior="all">
+            <item android:id="@+id/cheese"
+                android:title="Сыр" />
+            <item android:id="@+id/butter"
+                android:title="Масло" />
+            <item android:id="@+id/milk"
+                android:title="Молоко" />
+            </group>
+        </menu>
+    </item>
+
+
+
 </menu>
