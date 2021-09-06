@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_settings"
+        android:title="Настройки">
+        <menu>
+            <item android:id="@+id/save_settings"
+                android:title="Сохранить" />
+            <item android:id="@+id/open_settings"
+                android:title="Открыть" />
+        </menu>
+
+    </item>
+    <item
+        android:id="@+id/action_move"
+        android:title="Переход">
+        <menu>
+            <item android:id="@+id/forward"
+                android:title="Вперед" />
+            <item android:id="@+id/back"
+                android:title="Назад" />
+        </menu>
+
+    </item>
+</menu>
