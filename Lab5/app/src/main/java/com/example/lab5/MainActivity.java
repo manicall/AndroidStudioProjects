@@ -1,22 +1,72 @@
 package com.example.lab5;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
+    static final String AGE_KEY = "AGE";
+    static final String ACCESS_MESSAGE="ACCESS_MESSAGE";
+
+    ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    TextView textView = (TextView) findViewById(R.id.textView);
+                    if(result.getResultCode() == Activity.RESULT_OK){
+                        Intent intent = result.getData();
+                        String accessMessage = intent.getStringExtra(ACCESS_MESSAGE);
+                        textView.setText(accessMessage);
+                    }
+                    else{
+                        textView.setText("Ошибка доступа");
+                    }
+                }
+            });
     @Override
-    public void onCreate(Bundle savedInstance) {
-        super.onCreate(savedInstance);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+    public void onClick(View view) {
+        // получаем введенный возраст
+        EditText ageBox = (EditText) findViewById(R.id.age);
+        String age = ageBox.getText().toString();
 
+        Intent intent = new Intent(this, SecondActivity.class);
+        intent.putExtra(AGE_KEY, age);
 
+        mStartForResult.launch(intent);
     }
 
     public void showDialog(View v) {
         CustomDialogFragment dialog = new CustomDialogFragment();
         dialog.show(getSupportFragmentManager(), "first");
+    }
+
+    public void bar(){
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Title")
+                        .setContentText("Notification text");
+
+        Notification notification = builder.build();
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(1, notification);
     }
 }
