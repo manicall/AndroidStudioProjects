@@ -11,6 +11,8 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_main);
+
+
     }
 
     public void showDialog(View v) {

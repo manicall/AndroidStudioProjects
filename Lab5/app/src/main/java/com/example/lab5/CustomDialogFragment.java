@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,21 +22,39 @@ public class CustomDialogFragment extends DialogFragment {
         String button1String = "Войти";
         String button2String = "Отмена";
 
-
         return builder
                 .setTitle(title)
                 .setView(R.layout.dialog)
                 .setPositiveButton(button1String, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        String s = (String) getActivity().getLocalClassName();
+                        Dialog dialg = (Dialog) dialog;
+
+                        EditText nameText = dialg.findViewById(R.id.name);
+                        EditText passwordText = dialg.findViewById(R.id.password);
+
+                        String name = nameText.getText().toString();
+                        String password = passwordText.getText().toString();
+
+                        User user = new User(name, password);
+
+                        Class activityClass;
                         switch (getTag()) {
                             case "first":
-                                startActivity(new Intent(getActivity(), SecondActivity.class));
+                                activityClass = SecondActivity.class;
                                 break;
                             case "second":
-                                startActivity(new Intent(getActivity(), ThirdActivity.class));
+                                activityClass = ThirdActivity.class;
                                 break;
-                            }
+                            default:
+                                activityClass = MainActivity.class;
+                        }
+                        
+                        Intent intent = new Intent(getActivity(), activityClass);
+                        intent.putExtra(User.class.getSimpleName(), user);
+                        startActivity(intent);
+
+                        String s = (String) getActivity().getLocalClassName();
+
                     }
                 })
                 .setNegativeButton(button2String, new DialogInterface.OnClickListener() {
