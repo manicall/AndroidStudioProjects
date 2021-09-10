@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">AMD_Lab3</string>
+    <string name="action_settings">Настройки</string>
+    <string name="save">Сохранить</string>
+    <string name="open">Открыть</string>
+    <string name="action_radio">Радиокнопки</string>
+    <string name="cat">Кошка</string>
+    <string name="dog">Собака</string>
+    <string name="parrot">Попугай</string>
+    <string name="hamster">Хомячок</string>
+    <string name="action_check">Флажки</string>
+    <string name="cheese">Сыр</string>
+    <string name="butter">Масло</string>
+    <string name="milk">Молоко</string>
 </resources>

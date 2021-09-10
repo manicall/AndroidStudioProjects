@@ -2,44 +2,58 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_settings"
-        android:title="Настройки">
+        android:title="@string/action_settings">
         <menu>
-            <item android:id="@+id/save"
-                android:title="Сохранить" />
-            <item android:id="@+id/open"
-                android:title="Открыть" />
+            <group android:id="@+id/group_settings">
+                <item
+                    android:id="@+id/save"
+                    android:title="@string/save" />
+                <item
+                    android:id="@+id/open"
+                    android:title="@string/open" />
+            </group>
         </menu>
     </item>
 
     <item
         android:id="@+id/action_radio"
-        android:title="Радиокнопки">
+        android:title="@string/action_radio">
         <menu>
-            <group android:checkableBehavior="single">
-            <item android:id="@+id/cat"
-                android:title="Кошка" />
-            <item android:id="@+id/dog"
-                android:title="Собака" />
-            <item android:id="@+id/parrot"
-                android:title="Попугай" />
-            <item android:id="@+id/hamster"
-                android:title="Хомячок" />
+            <group
+                android:id="@+id/group_radio"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/cat"
+                    android:title="@string/cat" />
+                <item
+                    android:id="@+id/dog"
+                    android:title="@string/dog" />
+                <item
+                    android:id="@+id/parrot"
+                    android:title="@string/parrot" />
+                <item
+                    android:id="@+id/hamster"
+                    android:title="@string/hamster" />
             </group>
         </menu>
     </item>
 
     <item
         android:id="@+id/action_check"
-        android:title="Флажки">
-
+        android:title="@string/action_check">
         <menu>
-            <group android:checkableBehavior="all">
-            <item android:id="@+id/cheese"
-                android:title="Сыр" />
-            <item android:id="@+id/butter"
-                android:title="Масло" />
-            <item android:id="@+id/milk"
-                android:title="Молоко" />
+            <group
+                android:id="@+id/group_check"
+                android:checkableBehavior="all">
+                <item
+                    android:id="@+id/cheese"
+                    android:title="@string/cheese" />
+                <item
+                    android:id="@+id/butter"
+                    android:title="@string/butter" />
+                <item
+                    android:id="@+id/milk"
+                    android:title="@string/milk" />
             </group>
         </menu>
     </item>

@@ -40,6 +40,15 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     }
 
+
+    public void setInListener() {
+        inListener = getListener(rotationControl.getRotateBackward());
+    }
+
+    public void setOutListener() {
+        outListener = getListener(rotationControl.getRotateAhead());
+    }
+
     private Animation.AnimationListener getListener(RotateAnimation rotateAnimation) {
         return new Animation.AnimationListener() {
             @Override
@@ -59,13 +68,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         };
     }
 
-    public void setInListener() {
-        inListener = getListener(rotationControl.getRotateBackward());
-    }
 
-    public void setOutListener() {
-        outListener = getListener(rotationControl.getRotateAhead());
-    }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
