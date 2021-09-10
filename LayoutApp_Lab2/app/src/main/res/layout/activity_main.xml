@@ -18,7 +18,8 @@
             android:layout_width="261dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/cat1" />
+            app:srcCompat="@drawable/cat1"
+            android:contentDescription="@string/todo" />
 
     </FrameLayout>
 
@@ -32,21 +33,22 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="@string/button"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="232dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="Button" />
+            android:text="@string/button2" />
 
         <Button
             android:id="@+id/button3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="Button" />
+            android:text="@string/button3" />
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

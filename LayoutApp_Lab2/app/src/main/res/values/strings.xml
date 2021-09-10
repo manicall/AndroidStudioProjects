@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">LayoutApp_Lab2</string>
+    <string name="button">Button</string>
+    <string name="button2">Button</string>
+    <string name="button3">Button</string>
+    <string name="todo">TODO</string>
 </resources>
