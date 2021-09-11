@@ -28,4 +28,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public boolean isEqual(User user){
+        return this.name.equals(user.name) && this.password.equals(user.password);
+    }
 }

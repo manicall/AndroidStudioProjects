@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class ThirdActivity extends AppCompatActivity {
+public class ThirdActivity extends AppCompatActivity implements View.OnClickListener {
 
     // Идентификатор уведомления
     private static final int NOTIFY_ID = 101;
@@ -30,24 +30,12 @@ public class ThirdActivity extends AppCompatActivity {
             Toast.makeText(this, userInformation, Toast.LENGTH_SHORT).show();
         }
 
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("myApp", "Check1");
-                NotificationCompat.Builder builder =
-                        new NotificationCompat.Builder(ThirdActivity.this, CHANNEL_ID)
-                                //.setSmallIcon(R.drawable.ic_pets_black_24dp)
-                                .setContentTitle("Напоминание")
-                                .setContentText("Пора покормить кота")
-                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-                NotificationManagerCompat notificationManager =
-                        NotificationManagerCompat.from(ThirdActivity.this);
-                notificationManager.notify(NOTIFY_ID, builder.build());
-                Log.d("myApp", "Check2");
-            }
-        });
+
+    }
+
+    @Override
+    public void onClick(View view) {
 
     }
 }
