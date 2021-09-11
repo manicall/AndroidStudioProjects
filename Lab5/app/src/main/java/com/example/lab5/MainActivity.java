@@ -9,8 +9,11 @@ import androidx.core.app.NotificationCompat;
 
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -57,4 +60,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static User getUser() {return maximIvanov;}
+
+
 }

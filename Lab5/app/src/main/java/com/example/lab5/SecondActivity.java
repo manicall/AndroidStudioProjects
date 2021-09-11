@@ -25,16 +25,15 @@ public class SecondActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        createNotificationChannel();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
         Bundle arguments = getIntent().getExtras();
         User passedUser = (User) arguments.getSerializable(User.class.getSimpleName());;
         String userInformation = "Имя: " + passedUser.getName() + "; пароль: " + passedUser.getPassword();
-        String text = "потяните чтобы увидеть данные переданные в предыдущем активити";
+        String text = "потяните чтобы увидеть данные переданные из предыдущего активити";
 
-        bar("Успех", text, userInformation);
+        showNotification("Успех", text, userInformation);
 
     }
 
@@ -42,53 +41,30 @@ public class SecondActivity extends AppCompatActivity {
         CustomDialogFragment dialog = new CustomDialogFragment();
         dialog.show(getSupportFragmentManager(), "second");
     }
+    
+    private void showNotification(String title, String text, String bigText){
 
-    public void bar(String title, String text, String longText){
-        Context context = getApplicationContext();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"default")
+                .setSmallIcon(android.R.drawable.alert_dark_frame)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(bigText));
 
-        Intent notificationIntent = new Intent(context, MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(context,
-                0, notificationIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-
-        Notification.Builder builder = new Notification.Builder(context);
-
-        builder.setContentIntent(contentIntent)
-
-        // большая картинка
-
-        //.setTicker(res.getString(R.string.warning)) // текст в строке состояния
-        .setTicker("Последнее китайское предупреждение!")
-        .setWhen(System.currentTimeMillis())
-        .setAutoCancel(true)
-        //.setContentTitle(res.getString(R.string.notifytitle)) // Заголовок уведомления
-        .setContentTitle("Напоминание")
-        //.setContentText(res.getString(R.string.notifytext))
-        .setContentText("Пора покормить кота"); // Текст уведомления
-
-// Notification notification = builder.getNotification(); // до API 16
-        Notification notification = builder.build();
-
-        NotificationManager notificationManager = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFY_ID, notification);
-
-    }
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name ="channelName";
-            String description = "channelDescription";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            builder.setChannelId("YOUR_PACKAGE_NAME");
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    "YOUR_PACKAGE_NAME",
+                    "YOUR_APP_NAME",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+        notificationManager.notify(1,builder.build());
     }
-
 }
