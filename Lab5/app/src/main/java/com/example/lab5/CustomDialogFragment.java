@@ -52,7 +52,7 @@ public class CustomDialogFragment extends DialogFragment {
                 }
                 break;
             case "second":
-                if (isUserExist(MainActivity.getUser())) { /*!!! исправить на SecondActivity !!!*/
+                if (isUserExist(SecondActivity.getUser())) {
                     activityClass = ThirdActivity.class;
                 }
                 break;
@@ -66,8 +66,14 @@ public class CustomDialogFragment extends DialogFragment {
         } else {
             Intent intent = new Intent(getActivity(), activityClass);
             intent.putExtra(User.class.getSimpleName(), user);
-            startActivity(intent);
-            String s = (String) getActivity().getLocalClassName();
+            switch (getTag()) {
+                case "first":
+                    MainActivity.activityLaunch(intent);
+                    break;
+                case "second":
+                    SecondActivity.activityLaunch(intent);
+                    break;
+            }
         }
 
     }

@@ -15,51 +15,71 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+    static final String ACCESS_MESSAGE = "ACCESS_MESSAGE";
+    public static ActivityResultLauncher<Intent> mStartForResult;
+    private static User maximIvanov = new User("Maxim", "123");
 
-    static final String AGE_KEY = "AGE";
-    static final String ACCESS_MESSAGE="ACCESS_MESSAGE";
-    private static User maximIvanov = new User("Maxim","123");
-    /*ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
+    public static User getUser() {
+        return maximIvanov;
+    }
 
-                    TextView textView = (TextView) findViewById(R.id.textView);
-                    if(result.getResultCode() == Activity.RESULT_OK){
-                        Intent intent = result.getData();
-                        String accessMessage = intent.getStringExtra(ACCESS_MESSAGE);
-                        textView.setText(accessMessage);
-                    }
-                    else{
-                        textView.setText("Ошибка доступа");
-                    }
-                }
-            });*/
+    static void activityLaunch(Intent intent) {
+        mStartForResult.launch(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mStartForResult = registerStartForResult();
     }
-    /*public void onClick(View view) {
-        // получаем введенный возраст
-        EditText ageBox = (EditText) findViewById(R.id.age);
-        String age = ageBox.getText().toString();
-
-        Intent intent = new Intent(this, SecondActivity.class);
-        intent.putExtra(AGE_KEY, age);
-
-        mStartForResult.launch(intent);
-    }*/
 
     public void showDialog(View v) {
         CustomDialogFragment dialog = new CustomDialogFragment();
         dialog.show(getSupportFragmentManager(), "first");
     }
 
-    public static User getUser() {return maximIvanov;}
+    private void showNotification(String title, String text) {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this, "default1");
+        NotificationManager notificationManager =
+                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        MyNotification mNotification = new MyNotification(builder, notificationManager);
+        mNotification.showNotification(title, text);
+    }
+    private ActivityResultLauncher<Intent> registerStartForResult(){
+       return registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    Intent intent = result.getData();
+                    String message = intent.getStringExtra(ACCESS_MESSAGE);
+                    if (!message.isEmpty()) {
+                        switch (result.getResultCode()) {
+                            case Activity.RESULT_OK:
+                                Toast.makeText(
+                                        MainActivity.this,
+                                        message,
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                Toast.makeText(
+                                        MainActivity.this,
+                                        "Ошибка возврата результата",
+                                        Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        showNotification(
+                                "Ошибка", "Поле для возврата результата оказалось пустым");
+                    }
+                });
+    }
 
 }

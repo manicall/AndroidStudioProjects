@@ -4,38 +4,55 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
-public class ThirdActivity extends AppCompatActivity implements View.OnClickListener {
-
-    // Идентификатор уведомления
-    private static final int NOTIFY_ID = 101;
-    // Идентификатор канала
-    private static String CHANNEL_ID = "Cat channel";
+public class ThirdActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third);
 
         Bundle arguments = getIntent().getExtras();
+        User passedUser = (User) arguments.getSerializable(User.class.getSimpleName());
+        String userInformation =
+                "Имя: " + passedUser.getName() + "; пароль: " + passedUser.getPassword();
 
-        User user;
-        if(arguments!=null) {
-            user = (User) arguments.getSerializable(User.class.getSimpleName());
-            String userInformation = "Имя: " + user.getName() + " пароль: " + user.getPassword();
-            Toast.makeText(this, userInformation, Toast.LENGTH_SHORT).show();
-        }
-
-
-
+        showNotification("Успех", userInformation);
     }
 
     @Override
-    public void onClick(View view) {
-
+    public void onBackPressed() {
+        EditText editText = findViewById(R.id.editText);
+        sendMessage(editText.getText().toString());
+        super.onBackPressed();
     }
+
+    public void showDialog(View v) {
+        CustomDialogFragment dialog = new CustomDialogFragment();
+        dialog.show(getSupportFragmentManager(), "second");
+    }
+
+    private void showNotification(String title, String text){
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this,"default");
+        NotificationManager notificationManager =
+                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        MyNotification mNotification = new MyNotification(builder, notificationManager);
+        mNotification.showNotification(title, text);
+    }
+    private void sendMessage(String message){
+        Intent data = new Intent();
+        data.putExtra(MainActivity.ACCESS_MESSAGE, message);
+        setResult(RESULT_OK, data);
+    }
+
 }
