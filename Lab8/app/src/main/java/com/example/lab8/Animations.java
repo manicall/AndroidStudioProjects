@@ -12,5 +12,8 @@ public  class Animations {
     static final int NEXT_TO_THIRD_EXIT   = R.anim.left_out;
     //переход с третьего на второе активити
     static final int BACK_TO_SECOND_ENTER = R.anim.diagonaltranslate;
-    static final int BACK_TO_SECOND_EXIT  = R.anim.alpha;
+    public static final int ALPHA = R.anim.alpha;
+    static final int BACK_TO_SECOND_EXIT  = ALPHA;
+
 }
+
