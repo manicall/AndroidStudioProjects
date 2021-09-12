@@ -10,8 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lab8">
         <activity
+            android:name=".ThirdActivity"
+            android:exported="true"
+            android:label="ThirdActivity"/>
+        <activity
+            android:name=".SecondActivity"
+            android:exported="true"
+            android:label="SecondActivity"/>
+        <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:label="MainActivity (LAB8)">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
