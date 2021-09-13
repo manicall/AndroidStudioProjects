@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
 public class MainGameScreen implements Screen {
+    
     private World world; //переменная для управления миром
     private Box2DDebugRenderer rend; //отладочный отрисовщик тел Мира
     private OrthographicCamera camera; //видеокамера
@@ -31,43 +32,47 @@ public class MainGameScreen implements Screen {
     }
 
     //Процедура создания тела прямоугольника
-    private void createRect() {
+    private void createRect(BodyDef.BodyType type) {
         //Структура геометрических свойств тела
         BodyDef bDef = new BodyDef();
         //задать телу тип динамического тела (на него действует гравитация)
-        bDef.type = BodyDef.BodyType.DynamicBody;
+        bDef.type = type;
         //задать позицию тела в Мире – в метрах X и Y
-        //bDef.position.set(10,13);
-        bDef.position.set((int) (Math.random() * 10f + 2f), 14);
+        bDef.position.set(4,5);
+        //bDef.position.set((int) (Math.random() * 10f + 2f), 14);
         //создание тела в Мире
         rect = world.createBody(bDef);
 
         //Создать эскиз контура тела в виде приямоугольника 2х2 метра
         PolygonShape shape = new PolygonShape();
-        //shape.setAsBox(2,2);
-        shape.setAsBox((float) (Math.random() + 0.1f), (float) (Math.random() + 0.1f));
+        shape.setAsBox(1,1);
+        //shape.setAsBox((float) (Math.random() + 0.1f), (float) (Math.random() + 0.1f));
         //Структура физических свойств тела
         FixtureDef fDef = new FixtureDef();
         fDef.shape = shape;//назначить вид контура тела
         fDef.density = 2;  //назначить плотность тела г/см3
         fDef.restitution = 0.7f;//назначить упругость
         fDef.friction = 0.1f;   //назначить коэф-т трения
+
+        // вращение
+        rect.setAngularVelocity(-4f);
+
         rect.createFixture(fDef);//закрепить свойства за телом
+
     }
 
 
     //Процедура создания тела прямоугольника
-    private void createCircle() {
-
+    private void createCircle(BodyDef.BodyType type, boolean rotation) {
         float positionX = (float) (Math.random() * 10f + 2f);
         float radius = 0.3f;
 
         //Структура геометрических свойств тела
         BodyDef bDef = new BodyDef();
         //задать телу тип динамического тела (на него действует гравитация)
-        bDef.type = BodyDef.BodyType.DynamicBody;
+        bDef.type = type;
         //задать позицию тела в Мире – в метрах X и Y
-        bDef.position.set(positionX, 14);
+        bDef.position.set(positionX, 6);
         //создание тела в Мире
         rect = world.createBody(bDef);
 
@@ -81,29 +86,16 @@ public class MainGameScreen implements Screen {
         fDef.density = 2;  //назначить плотность тела г/см3
         fDef.restitution = 0.7f;//назначить упругость
         fDef.friction = 0.1f;   //назначить коэф-т трения
+
+        if (rotation){
+            rect.setAngularVelocity(-4f);
+        }
+
         rect.createFixture(fDef);//закрепить свойства за телом
     }
 
-    //Процедура создания внешних стен
-    private void createWall() {
-        BodyDef bDef = new BodyDef();
-        bDef.type = BodyDef.BodyType.StaticBody;
-        bDef.position.set(0, 0);
-
-        Body w = world.createBody(bDef);
-        ChainShape shape = new ChainShape();
-        //контур стены в виде перевернутой трапеции без основания
-        shape.createChain(new Vector2[]{new Vector2(1, 15), new Vector2(1, 1),
-                new Vector2(19, 1), new Vector2(19, 15)});
-
-        FixtureDef fDef = new FixtureDef();
-        fDef.shape = shape;
-        fDef.friction = 0.1f;
-        w.createFixture(fDef);
-    }
-
     //Процедура создания треугольников
-    private void createTriangle() {
+    private void createTriangle(BodyDef.BodyType type) {
         Vector2[] vertices = new Vector2[3];
         vertices[0] = new Vector2(0f  , -0.6f  );
         vertices[1] = new Vector2(1f , -0.6f  );
@@ -111,11 +103,10 @@ public class MainGameScreen implements Screen {
         //Структура геометрических свойств тела
         BodyDef bDef = new BodyDef();
         //задать телу тип динамического тела (на него действует гравитация)
-        bDef.type = BodyDef.BodyType.KinematicBody;
+        bDef.type = type;
         //задать позицию тела в Мире – в метрах X и Y
-        bDef.position.set(10,13);
+        bDef.position.set(10,4);
         //создание тела в Мире
-
         rect = world.createBody(bDef);
         //Создать эскиз контура тела в виде приямоугольника 2х2 метра
         PolygonShape shape = new PolygonShape();
@@ -144,15 +135,13 @@ public class MainGameScreen implements Screen {
         //Создать отладочный отрисовщик
         rend = new Box2DDebugRenderer();
 
-        createTriangle();
-
-        //Вызвыть процедуру создания контуров внешних стен
-        //createWall();
+        createTriangle(BodyDef.BodyType.KinematicBody);
+        createRect(BodyDef.BodyType.KinematicBody);
+        createCircle(BodyDef.BodyType.KinematicBody, true);
     }
 
     @Override
     public void render(float delta) {
-
         //Очистка экрана
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //Собственно отрисовка
@@ -163,10 +152,11 @@ public class MainGameScreen implements Screen {
 
         Nf += delta;
         if (Nf > 0.5f) {
-            createCircle();
+            createCircle(BodyDef.BodyType.DynamicBody, false);
             Nblock += 1;
             Nf = 0;
         }
+
 
     }
 
@@ -192,15 +182,12 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void dispose() {
-
         //Удаление всех тел Мира
         Array<Body> bodies = new Array<Body>();
         world.getBodies(bodies);
         for (int i = 0; i < bodies.size; i++) world.destroyBody(bodies.get(i));
 
-
         rend.dispose();
         world.dispose();
-
     }
 }
