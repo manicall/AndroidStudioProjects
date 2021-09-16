@@ -41,6 +41,7 @@ public class MainGameScreen implements Screen {
         bDef.position.set(4,5);
         //bDef.position.set((int) (Math.random() * 10f + 2f), 14);
         //создание тела в Мире
+        bDef.fixedRotation = false;
         rect = world.createBody(bDef);
 
         //Создать эскиз контура тела в виде приямоугольника 2х2 метра

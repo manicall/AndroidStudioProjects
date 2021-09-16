@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity  {
                 overridePendingTransition(Animations.NEXT_TO_SECOND_ENTER, Animations.NEXT_TO_SECOND_EXIT);
             }
         });
-
     }
 
 }
