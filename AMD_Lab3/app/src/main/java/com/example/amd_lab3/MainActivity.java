@@ -1,15 +1,12 @@
 package com.example.amd_lab3;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CheckBox;
 import android.widget.TextView;
-import android.util.Log;
 
-import com.example.amd_lab3.R;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyApp";
@@ -21,14 +18,14 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
+        // установка макета меню в приложении
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        // текстовое поле
         TextView headerView = (TextView) findViewById(R.id.selectedMenuItem);
         // передача заголовка меню в текстовое поле
         setTitle(headerView, item);
@@ -67,13 +64,16 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+    // вернуть состояние флажка
     CharSequence getItemState(MenuItem item){
         return item.isChecked() == true ? "выбран" : "не выбран";
     }
+    // установить название кнопки меню в текстовое поле на экране
     void setTitle(TextView headerView, MenuItem item){
         if (item.isCheckable()) {
-            headerView.setText("заголовок меню: " + item.getTitle() + " состояние флажка: " + getItemState(item));
+            headerView.setText(
+                    "заголовок меню: " + item.getTitle() +
+                            " состояние флажка: " + getItemState(item));
         } else {
             headerView.setText("заголовок меню: " + item.getTitle());
         }
