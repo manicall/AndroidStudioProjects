@@ -16,8 +16,7 @@ public class BackgroundFragment extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_background, container, false);
     }
-
-    // обновление текстового поля
+    // устанавливает фон во фрагменте в зависимости от полученной даты из первого фрагмента
     public void setSelectedItem(String selectedItem) {
         int numOfSeason = Integer.parseInt(selectedItem);
         ImageView imageView = getView().findViewById(R.id.imageView);

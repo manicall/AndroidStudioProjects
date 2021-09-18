@@ -14,8 +14,10 @@ public class MainActivity extends AppCompatActivity  implements CalendarFragment
 
     @Override
     public void onSendData(String selectedItem) {
+        // получаем фрагмент который получит данные
         BackgroundFragment fragment = (BackgroundFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.detailFragment);
+        // отправляем данные в получателя с помощью определенного в нем метода
         if (fragment != null)
             fragment.setSelectedItem(selectedItem);
     }

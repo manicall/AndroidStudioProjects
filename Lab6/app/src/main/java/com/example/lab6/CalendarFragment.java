@@ -16,13 +16,13 @@ public class CalendarFragment extends Fragment {
     }
 
     private OnFragmentSendDataListener fragmentSendDataListener;
-    String[] countries = { "Бразилия", "Аргентина", "Колумбия", "Чили", "Уругвай"};
 
-
+    // вызывается когда фрагмент связывается с активностью
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
+            // получаем слушатель для отправки данных
             fragmentSendDataListener = (OnFragmentSendDataListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
@@ -33,11 +33,12 @@ public class CalendarFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // получаем виджет фрагмента на основе созданого макета
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
-
-
+        // получаем виджет календаря
         CalendarView calendarView = view.findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            // вызывается при изменении выбранной даты в календаре
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth)
             {
