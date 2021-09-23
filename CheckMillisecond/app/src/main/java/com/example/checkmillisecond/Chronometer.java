@@ -10,20 +10,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import java.text.DecimalFormat;
 
-public class Chronometer extends TextView {
+
+
+public class Chronometer extends androidx.appcompat.widget.AppCompatTextView {
     @SuppressWarnings("unused")
     private static final String TAG = "Chronometer";
 
     public interface OnChronometerTickListener {
-
         void onChronometerTick(Chronometer chronometer);
     }
 
-    private long mBase;
+    private long base;
     private boolean mVisible;
     private boolean mStarted;
     private boolean mRunning;
@@ -33,6 +33,7 @@ public class Chronometer extends TextView {
 
     private long timeElapsed;
 
+    /*конструктор класса*/
     public Chronometer(Context context) {
         this (context, null, 0);
     }
@@ -47,86 +48,77 @@ public class Chronometer extends TextView {
         init();
     }
 
-    private void init() {
-        mBase = SystemClock.elapsedRealtime();
-        updateText(mBase);
+    public long getBase() {
+        return base;
     }
 
     public void setBase(long base) {
-        mBase = base;
+        this.base = base;
         dispatchChronometerTick();
         updateText(SystemClock.elapsedRealtime());
     }
 
-    public long getBase() {
-        return mBase;
+    // инициализируем секундомер системным временем
+    private void init() {
+        base = SystemClock.elapsedRealtime();
+        updateText(base);
     }
-
+    // устанавливаем слушатель на тик секудомера
     public void setOnChronometerTickListener(
             OnChronometerTickListener listener) {
         mOnChronometerTickListener = listener;
     }
-
-    public OnChronometerTickListener getOnChronometerTickListener() {
-        return mOnChronometerTickListener;
-    }
-
+    // активируем секундомер
     public void start() {
         mStarted = true;
         updateRunning();
     }
-
+    // останавливаем секундомер
     public void stop() {
         mStarted = false;
         updateRunning();
     }
-
-
-    public void setStarted(boolean started) {
-        mStarted = started;
-        updateRunning();
-    }
-
+    // если главное окно активности отключается от оконного менеджера
     @Override
     protected void onDetachedFromWindow() {
         super .onDetachedFromWindow();
         mVisible = false;
         updateRunning();
     }
-
+    // если изменилась видимость виджета
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         super .onWindowVisibilityChanged(visibility);
         mVisible = visibility == VISIBLE;
         updateRunning();
     }
-
+    // обновляем текст
     private synchronized void updateText(long now) {
-        timeElapsed = now - mBase;
+        // разность между времени от запуска секундомера
+        // и системным временем
+        timeElapsed = now - base;
 
         DecimalFormat df = new DecimalFormat("00");
 
+        // вычисляем часы
         int hours = (int)(timeElapsed / (3600 * 1000));
         int remaining = (int)(timeElapsed % (3600 * 1000));
-
+        // вычисляем минуты
         int minutes = (int)(remaining / (60 * 1000));
         remaining = (int)(remaining % (60 * 1000));
-
+        // вычисляем секунды
         int seconds = (int)(remaining / 1000);
         remaining = (int)(remaining % (1000));
-
-        int milliseconds = (int)(((int)timeElapsed % 1000) / 100);
-
+        // вычисляем милисекунды
+        int milliseconds = (int)(remaining / 10);
+        // приводим полученные данные к строке,
+        // правильного формата
         String text = "";
-
-        if (hours > 0) {
-            text += df.format(hours) + ":";
-        }
-
+        text += df.format(hours) + ":";
         text += df.format(minutes) + ":";
-        text += df.format(seconds) + ":";
-        text += Integer.toString(milliseconds);
-
+        text += df.format(seconds) + ".";
+        text +=  df.format(milliseconds);
+        // устанавливаем количество пройденного времени
         setText(text);
     }
 
@@ -136,8 +128,8 @@ public class Chronometer extends TextView {
             if (running) {
                 updateText(SystemClock.elapsedRealtime());
                 dispatchChronometerTick();
-                mHandler.sendMessageDelayed(Message.obtain(mHandler,
-                        TICK_WHAT), 100);
+                //
+                mHandler.sendMessageDelayed(Message.obtain(mHandler, TICK_WHAT), 10);
             } else {
                 mHandler.removeMessages(TICK_WHAT);
             }
@@ -151,7 +143,7 @@ public class Chronometer extends TextView {
                 updateText(SystemClock.elapsedRealtime());
                 dispatchChronometerTick();
                 sendMessageDelayed(Message.obtain(this , TICK_WHAT),
-                        100);
+                        10); // откладываем
             }
         }
     };
@@ -162,8 +154,5 @@ public class Chronometer extends TextView {
         }
     }
 
-    public long getTimeElapsed() {
-        return timeElapsed;
-    }
 
 }
