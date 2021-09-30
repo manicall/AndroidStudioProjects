@@ -2,17 +2,13 @@ package com.example.lab5;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class ThirdActivity extends AppCompatActivity {
     @Override
@@ -51,7 +47,7 @@ public class ThirdActivity extends AppCompatActivity {
     }
     private void sendMessage(String message){
         Intent data = new Intent();
-        data.putExtra(MainActivity.ACCESS_MESSAGE, message);
+        data.putExtra(MainActivity.MESSAGE, message);
         setResult(RESULT_OK, data);
     }
 
