@@ -1,27 +1,20 @@
 package com.example.lab5;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    static final String ACCESS_MESSAGE = "ACCESS_MESSAGE";
+    static final String MESSAGE = "MESSAGE";
     public static ActivityResultLauncher<Intent> mStartForResult;
     private static User maximIvanov = new User("Maxim", "123");
 
@@ -60,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     Intent intent = result.getData();
-                    String message = intent.getStringExtra(ACCESS_MESSAGE);
+                    // текст который вернулся из второго активити
+                    String message = intent.getStringExtra(MESSAGE);
                     if (!message.isEmpty()) {
                         switch (result.getResultCode()) {
                             case Activity.RESULT_OK:

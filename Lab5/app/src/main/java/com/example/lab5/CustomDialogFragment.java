@@ -25,14 +25,17 @@ public class CustomDialogFragment extends DialogFragment {
         String button2String = "Отмена";
 
         return builder
+                /*характеристики диалогового окна*/
                 .setTitle(title)
                 .setView(R.layout.dialog)
+                // кнопка Войти
                 .setPositiveButton(button1String, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int id) {
                         dialog = (Dialog) dialogInterface;
                         startNewActivity(getActivityClass());
                     }
                 })
+                // кнопка Отмена
                 .setNegativeButton(button2String, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //вызов активити
@@ -68,6 +71,7 @@ public class CustomDialogFragment extends DialogFragment {
             intent.putExtra(User.class.getSimpleName(), user);
             switch (getTag()) {
                 case "first":
+                    // запуск активити с ожиданием возврата результата
                     MainActivity.activityLaunch(intent);
                     break;
                 case "second":
