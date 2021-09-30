@@ -49,8 +49,12 @@ public class MainActivity extends AppCompatActivity {
         mNotification.showNotification(title, text);
     }
     private ActivityResultLauncher<Intent> registerStartForResult(){
+        // метод регистрирующий функцию, которая будет обрабатывать результат
        return registerForActivityResult(
+               // в качестве входного объекта устанавливает объект Intent
+               // а в качестве типа результата - тип ActivityResult
                 new ActivityResultContracts.StartActivityForResult(),
+               // обработка полученного результата
                 result -> {
                     Intent intent = result.getData();
                     // текст который вернулся из второго активити

@@ -28,6 +28,8 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    // проверяет, что поля текущего класса
+    // полностью соответсвуют полям передаваемого класса в параметре
     public boolean isEqual(User user){
         return this.name.equals(user.name) && this.password.equals(user.password);
     }

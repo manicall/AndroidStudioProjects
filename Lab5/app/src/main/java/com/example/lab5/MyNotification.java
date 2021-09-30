@@ -8,11 +8,13 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 public class MyNotification {
-    private static int id = 0;
-    int notifyId;
-    String channelId;
+    private static int id = 0; // счетчик созданных экземпляров текущего класса
+    int notifyId; // идентификатор уведомления
+    String channelId; // идентификатор канала
 
+    //  создает макет уведомления
     NotificationCompat.Builder builder;
+    // класс для уведомления пользователя о происходящих событиях
     NotificationManager notificationManager;
 
     MyNotification(NotificationCompat.Builder builder, NotificationManager notificationManager){
@@ -29,7 +31,8 @@ public class MyNotification {
             .setSmallIcon(android.R.drawable.alert_dark_frame)
             .setContentTitle(title)
             .setContentText(text);
-
+        /*проверка андроид версии устройства,
+        на котором будет вызвано уведомление  */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             builder.setChannelId(channelId);
         }
@@ -43,6 +46,8 @@ public class MyNotification {
                 notificationManager.createNotificationChannel(channel);
             }
         }
+        // создание уведомления с указанным идентификатором и
+        // с установленными параметрами
         notificationManager.notify(notifyId,builder.build());
     }
 }

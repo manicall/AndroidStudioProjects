@@ -33,11 +33,13 @@ public class SecondActivity extends AppCompatActivity {
         setContentView(R.layout.activity_second);
 
         Bundle arguments = getIntent().getExtras();
+        // получение информации из предыдущего активити
         User passedUser = (User) arguments.getSerializable(User.class.getSimpleName());
         String userInformation =
                 "Имя: " + passedUser.getName() + "; пароль: " + passedUser.getPassword();
-
+        // передача заголовка, и текста уведомления
         showNotification("Успех", userInformation);
+        // для регистрации возврата результата из следующего активити
         mStartForResult = registerStartForResult();
     }
 
@@ -56,15 +58,18 @@ public class SecondActivity extends AppCompatActivity {
     }
     // отображение уведомления
     private void showNotification(String title, String text){
+        //  создает макет уведомления
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this,"default");
+        // класс для уведомления пользователя о происходящих событиях
         NotificationManager notificationManager =
                 (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
+        // экземпляр пользовательского класса MyNotification
         MyNotification mNotification = new MyNotification(builder, notificationManager);
+        // показывает уведомление
         mNotification.showNotification(title, text);
     }
-    //
+    // возвращение сообщение на предыдущее активити
     private void sendMessage(String message){
         Intent data = new Intent();
         data.putExtra(MainActivity.MESSAGE, message);
@@ -72,10 +77,15 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private ActivityResultLauncher<Intent> registerStartForResult(){
+        // метод регистрирующий функцию, которая будет обрабатывать результат
         return registerForActivityResult(
+                // в качестве входного объекта устанавливает объект Intent
+                // а в качестве типа результата - тип ActivityResult
                 new ActivityResultContracts.StartActivityForResult(),
+                // обработка полученного результата
                 result -> {
                     Intent intent = result.getData();
+                    // текст который вернулся из следующего активити
                     String message = intent.getStringExtra(ACCESS_MESSAGE);
                     if (!message.isEmpty()) {
                         switch (result.getResultCode()) {
