@@ -20,43 +20,72 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View view){
         SQLiteDatabase db = getBaseContext().openOrCreateDatabase("app.db", MODE_PRIVATE, null);
         createTable(db);
-        addStudent(db, "Ivanov.MA", "8VT");
 
-        Cursor query = db.rawQuery("SELECT * FROM student;", null);
-        if(query.moveToFirst()){
-            String name = query.getString(0);
-            String sGroup = query.getString(1);
-            Log.d("MyApp", name + " " + sGroup);
+        String studentNameToFind = "'Ivanov.A'";
+
+        Cursor query = db.rawQuery("SELECT Student.name, Subject.name, mark.value FROM student " +
+                "join mark on student.id = studentId " +
+                "join subject on subject.id = subjectId " +
+                "where student.name = " + studentNameToFind  + "  ;", null);
+
+        query.moveToFirst();
+        while(!query.isAfterLast()){
+            String studentName = query.getString(0);
+            String subjectName = query.getString(1);
+            String markValue = query.getString(2);
+            Log.d("MyApp", studentName + " " + subjectName + " " + markValue);
+            query.moveToNext();
         }
-
         query.close();
-        db.close();
+/*        query = db.rawQuery("SELECT * FROM student;", null);
+        query.moveToFirst();
+        while(!query.isAfterLast()){
+            String id = query.getString(0);
+            String name = query.getString(1);
+            String group = query.getString(2);
+            Log.d("MyApp", id + name + " " + group);
+            query.moveToNext();
+        }
+        query.close();
+        query = db.rawQuery("SELECT * FROM student;", null);
+        query.moveToFirst();
+        while(!query.isAfterLast()){
+            String id = query.getString(0);
+            String name = query.getString(1);
+            String group = query.getString(2);
+            Log.d("MyApp", id + name + " " + group);
+            query.moveToNext();
+        }
+        query.close();*/
+
+        //db.close();
     }
 
     private void createTable(SQLiteDatabase db){
         db.execSQL("CREATE TABLE IF NOT EXISTS student (" +
                 "id INTEGER PRIMARY KEY, " +
                 "name TEXT NOT NULL, " +
-                "sGroup TEXT NOT NULL)");
+                "_group TEXT NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS subject (" +
                 "id INTEGER PRIMARY KEY," +
-                "name TEXT NOT NULL," +
-                "studentId INTEGER," +
-                "FOREIGN KEY (studentId) REFERENCES subject(id) ON DELETE CASCADE ON UPDATE CASCADE)");
+                "name TEXT NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS mark (" +
-                "id INTEGER PRIMARY KEY, " +
-                "value INTEGER NOT NULL," +
-                "subjectId INTEGER UNIQUE," +
+                "value TEXT NOT NULL," +
+                "studentId INTEGER," +
+                "subjectId INTEGER," +
+                "UNIQUE  (studentId, subjectId), " +
+                "FOREIGN KEY (studentId) REFERENCES subject(id) ON DELETE CASCADE ON UPDATE CASCADE, " +
                 "FOREIGN KEY (subjectId) REFERENCES subject(id) ON DELETE CASCADE ON UPDATE CASCADE)");
     }
-    private void addStudent(SQLiteDatabase db, String _name, String _sGroup){
-        db.execSQL("INSERT INTO student (name, sGroup) VALUES (@_name, @_sGroup);");
+    private void addStudent(SQLiteDatabase db, String _name, String _group){
+        db.execSQL("INSERT INTO student (name, _group) VALUES (" + _name + ", " + _group + ");");
     }
-    private void addSubject(SQLiteDatabase db, String _name, int _studentId){
-        db.execSQL("INSERT INTO subject (name, studentId) VALUES (@_name, @_studentId);");
+    private void addSubject(SQLiteDatabase db, String _name){
+        db.execSQL("INSERT INTO subject (name) VALUES (" + _name + ");");
     }
-    private void addMark(SQLiteDatabase db, int _value, String _subjectId){
-        db.execSQL("INSERT INTO mark (value, subjectId) VALUES (@_value, @_subjectId);");
+    private void addMark(SQLiteDatabase db, String _value, int _studentId, int _subjectId){
+        db.execSQL("INSERT INTO mark (value, studentId,  subjectId) " +
+                "VALUES (" + _value + ", "   + _studentId +  ", " + _subjectId  + ");");
     }
 
 
