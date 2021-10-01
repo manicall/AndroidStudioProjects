@@ -2,28 +2,35 @@ package com.example.lab10;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ListActivity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class MainActivity extends ListActivity {
+    private ArrayAdapter<String> mAdapter;
+    private ArrayList<String> studentsNameList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
 
-    public void onClick(View view){
         SQLiteDatabase db = getBaseContext().openOrCreateDatabase("app.db", MODE_PRIVATE, null);
         createTable(db);
 
-        String studentNameToFind = "'Ivanov.A'";
+        //String studentNameToFind = "'Ivanov.A'";
 
-        Cursor query = db.rawQuery("SELECT Student.name, Subject.name, mark.value FROM student " +
+        /*Cursor query = db.rawQuery("SELECT Student.name, Subject.name, mark.value FROM student " +
                 "join mark on student.id = studentId " +
                 "join subject on subject.id = subjectId " +
                 "where student.name = " + studentNameToFind  + "  ;", null);
@@ -36,29 +43,27 @@ public class MainActivity extends AppCompatActivity {
             Log.d("MyApp", studentName + " " + subjectName + " " + markValue);
             query.moveToNext();
         }
-        query.close();
-/*        query = db.rawQuery("SELECT * FROM student;", null);
-        query.moveToFirst();
-        while(!query.isAfterLast()){
-            String id = query.getString(0);
-            String name = query.getString(1);
-            String group = query.getString(2);
-            Log.d("MyApp", id + name + " " + group);
-            query.moveToNext();
-        }
-        query.close();
-        query = db.rawQuery("SELECT * FROM student;", null);
-        query.moveToFirst();
-        while(!query.isAfterLast()){
-            String id = query.getString(0);
-            String name = query.getString(1);
-            String group = query.getString(2);
-            Log.d("MyApp", id + name + " " + group);
-            query.moveToNext();
-        }
         query.close();*/
 
-        //db.close();
+        Cursor studentCursor = db.rawQuery("SELECT * FROM student;", null);
+        studentCursor.moveToFirst();
+        while(!studentCursor.isAfterLast()){
+            // добавление имени студента
+            studentsNameList.add(studentCursor.getString(1));
+            studentCursor.moveToNext();
+        }
+        studentCursor.close();
+
+        mAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, studentsNameList);
+        setListAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Toast.makeText(getApplicationContext(),
+                "Вы выбрали " + l.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
     }
 
     private void createTable(SQLiteDatabase db){
