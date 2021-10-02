@@ -8,17 +8,21 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class InformationList extends ListActivity {
+public class InformationList extends AppCompatActivity {
     private ArrayAdapter<String> mAdapter;
     private ArrayList<String> studentsRecordsList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information_list);
+        ListView informationList = findViewById(R.id.informationList);
+
+
 
         SQLiteDatabase db =
                 getBaseContext().openOrCreateDatabase("app.db", MODE_PRIVATE, null);
@@ -46,6 +50,6 @@ public class InformationList extends ListActivity {
 
         mAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, studentsRecordsList);
-        setListAdapter(mAdapter);
+        informationList.setAdapter(mAdapter);
     }
 }
