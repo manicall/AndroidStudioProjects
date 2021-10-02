@@ -1,30 +1,31 @@
 package com.example.lab11;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.Environment;
 import android.util.Log;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
 public final class Helper {
-    private static final String TAG = "Helper";
+    private static final String APP_PREFERENCES = "mysettings";
+    private static final String APP_PREFERENCES_PATH = "path";
+    private static SharedPreferences mSettings;
 
-    public static Properties getConfigProperties(Context context, String name) {
-        Resources resources = context.getResources();
-
-        try {
-            InputStream rawResource = resources.openRawResource(R.raw.config);
-            Properties properties = new Properties();
-            properties.load(rawResource);
-            return properties;
-        } catch (Resources.NotFoundException e) {
-            Log.e(TAG, "Unable to find the config file: " + e.getMessage());
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to open config file.");
-        }
-
-        return null;
+    public static void setSettings(Context context, String value){
+        mSettings = context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSettings.edit();
+        editor.putString(APP_PREFERENCES_PATH, value);
+        editor.apply();
+    }
+    public static String getSettings(Context context){
+        mSettings = context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        return mSettings.getString(APP_PREFERENCES_PATH,
+                Environment.getExternalStorageDirectory().toString());
     }
 }

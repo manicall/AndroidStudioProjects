@@ -1,11 +1,14 @@
 package com.example.lab11;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,20 +26,17 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<String> directories;
     File currentPath;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Properties properties = Helper.getConfigProperties(this, "path");
-
-        currentPath = Environment.getExternalStorageDirectory();// new File(properties.getProperty("path"));
-
+        currentPath = new File (Helper.getSettings(this));
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
+
         spinnerSetAdapter(spinner, currentPath);
 
-        AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Получаем выбранный объект
@@ -48,19 +48,29 @@ public class MainActivity extends AppCompatActivity {
                         currentPath = new File(item);
                     }
                     spinnerSetAdapter(spinner, currentPath);
-                    Log.d("Files", "onItemSelected: " + item);
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
-        };
-        spinner.setOnItemSelectedListener(itemSelectedListener);
+        });
 
+        Button copyButton = findViewById(R.id.copyButton);
+        copyButton.setOnClickListener(view -> {
+            try {
+                copy(getFilesDir(), currentPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Helper.setSettings(this, currentPath.toString());
     }
 
     private static void spinnerSetAdapter(Spinner spinner, File currentPath){
@@ -91,20 +101,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-/*        Button copyButton = findViewById(R.id.copyButton);
-        // обработка нажатия на кнопку
-        copyButton.setOnClickListener(view -> {
-            File filesDirPath = getFilesDir();
-            File sdcardPath =
-                    new File(Environment.getExternalStorageDirectory().toString() +
-                            editText.getText());
-
-            *//*try {
-                copy(filesDirPath, sdcardPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*//*
-        });*/
 
 
     public static void printContent(File file) {
