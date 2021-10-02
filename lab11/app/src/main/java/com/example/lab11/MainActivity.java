@@ -14,12 +14,15 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class MainActivity extends AppCompatActivity {
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         Button copyButton = findViewById(R.id.copyButton);
         copyButton.setOnClickListener(view -> {
             try {
-                copy(getFilesDir(), currentPath);
+                copyFileUsingStream(getFilesDir(), currentPath);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -90,45 +93,35 @@ public class MainActivity extends AppCompatActivity {
             dirNames.add("/..");
         }
 
-        File[] subFiles = currentDir.listFiles();
-        for (File subFile : subFiles){
-            if(subFile.isDirectory()){
-                dirNames.add(subFile.toString());
-            }
-        }
+        String[] subFiles = currentDir.list((file, s) -> new File(file.toString() + "/" + s).isDirectory());
+        for (String subFile : subFiles) dirNames.add(currentDir + "/" + subFile);
         return dirNames;
     }
 
+    private static void copyFileUsingStream(File source, File dest) throws IOException {
+        InputStream is = null;
+        OutputStream os = null;
 
+        File [] files = source.listFiles(file -> file.isFile());
+        String[] subFiles = source.list((file, s) -> new File(file.toString() + "/" + s).isFile());
 
-
-
-    public static void printContent(File file) {
-        String path = file.toString();
-            Log.d("Files","Path: "+path);
-        File directory = new File(path);
-        File[] files = directory.listFiles();
-            Log.d("Files","Size: "+files.length);
-            for(
-        int i = 0;
-        i<files.length;i++)
-
-        {
-            Log.d("Files", "FileName:" + files[i].getName());
-        }
-
-    }
-
-    public static void copy(File src, File dst) throws IOException {
-        try (InputStream in = new FileInputStream(src)) {
-            try (OutputStream out = new FileOutputStream(dst)) {
-                // Transfer bytes from in to out
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) {
-                    out.write(buf, 0, len);
+        for (String subFile : subFiles) {
+            try {
+                Log.d("Files", "copyFileUsingStream: " + subFile);
+                is = new FileInputStream(source.toString() + "/" + subFile);
+                os = new FileOutputStream(dest.toString() + "/" + subFile);
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = is.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (is != null) is.close();
+                if (os != null) os.close();
             }
         }
     }
+
 }
