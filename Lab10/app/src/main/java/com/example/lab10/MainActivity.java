@@ -3,6 +3,7 @@ package com.example.lab10;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -25,27 +26,12 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SQLiteDatabase db = getBaseContext().openOrCreateDatabase("app.db", MODE_PRIVATE, null);
-        createTable(db);
-
-        //String studentNameToFind = "'Ivanov.A'";
-
-        /*Cursor query = db.rawQuery("SELECT Student.name, Subject.name, mark.value FROM student " +
-                "join mark on student.id = studentId " +
-                "join subject on subject.id = subjectId " +
-                "where student.name = " + studentNameToFind  + "  ;", null);
-
-        query.moveToFirst();
-        while(!query.isAfterLast()){
-            String studentName = query.getString(0);
-            String subjectName = query.getString(1);
-            String markValue = query.getString(2);
-            Log.d("MyApp", studentName + " " + subjectName + " " + markValue);
-            query.moveToNext();
-        }
-        query.close();*/
+        SQLiteDatabase db =
+                getBaseContext().openOrCreateDatabase("app.db", MODE_PRIVATE, null);
+        addRecords(db);
 
         Cursor studentCursor = db.rawQuery("SELECT * FROM student;", null);
+
         studentCursor.moveToFirst();
         while(!studentCursor.isAfterLast()){
             // добавление имени студента
@@ -62,8 +48,10 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        Toast.makeText(getApplicationContext(),
-                "Вы выбрали " + l.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, InformationList.class);
+        intent.putExtra("name", l.getItemAtPosition(position).toString());
+        startActivity(intent);
     }
 
     private void createTable(SQLiteDatabase db){
@@ -92,6 +80,30 @@ public class MainActivity extends ListActivity {
         db.execSQL("INSERT INTO mark (value, studentId,  subjectId) " +
                 "VALUES (" + _value + ", "   + _studentId +  ", " + _subjectId  + ");");
     }
+    private void addRecords(SQLiteDatabase db){
+        db.execSQL("drop table mark");
+        db.execSQL("drop table student");
+        db.execSQL("drop table subject");
 
+        createTable(db);
+
+        addStudent(db, "'Иванов Максим'", "'8ВТ'");
+        addStudent(db, "'Яковлев Андрей'", "'8ВТ'");
+        addStudent(db, "'Разумовская Ирина'", "'8ВТ'");
+
+        addSubject(db, "'Программирование мобильных устройств'");
+        addSubject(db, "'Компьютерная графика'");
+        addSubject(db, "'ЭВМ и периферийные устройства'");
+
+        addMark(db, "'Отлично'",1, 1);
+        addMark(db, "'Отлично'",2, 1);
+        addMark(db, "'Отлично'",3, 1);
+        addMark(db, "'Отлично'",1, 2);
+        addMark(db, "'Хорошо'",2, 2);
+        addMark(db, "'Хорошо'",3, 2);
+        addMark(db, "'Отлично'",1, 3);
+        addMark(db, "'Хорошо'",2, 3);
+        addMark(db, "'Хорошо'",3, 3);
+    }
 
 }
