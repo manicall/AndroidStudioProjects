@@ -3,14 +3,20 @@ package com.example.lab6;
 import java.time.Month;
 
 public class Seasons {
+    // константы определяющие времена года
     public static final int SUMMER = 0;
     public static final int AUTUMN = 1;
     public static final int WINTER = 2;
     public static final int SPRING = 3;
 
+    // получить время года, на основе введенного месяца
     public static int getSeason(int month) {
+        /*смещение полученного месяца на 4
+        тк для значений 0-3 используются
+        константы времен года*/
         final int OFFSET = 4;
         int myMonth = month + OFFSET;
+        // константы определяющие месяц года
         final int JANUARY = 4;
         final int FEBRUARY = 5;
         final int MARCH = 6;
@@ -23,7 +29,8 @@ public class Seasons {
         final int OCTOBER = 13;
         final int NOVEMBER = 14;
         final int DECEMBER = 15;
-
+        // выбор времени года
+        // на основе месяца со смещением
         switch (myMonth) {
             case JUNE:
             case JULY:
