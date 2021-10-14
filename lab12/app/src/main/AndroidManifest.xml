@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Lab12">
+        <service android:name="com.example.lab12.SnowFlakeService" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
