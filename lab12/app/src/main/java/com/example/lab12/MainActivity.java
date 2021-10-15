@@ -2,10 +2,10 @@ package com.example.lab12;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,8 +14,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(MainActivity.this, SnowFlakeService.class);
-        startService(intent);
+        Button start = findViewById(R.id.start);
+
+        start.setOnClickListener(view -> startService(new Intent(MainActivity.this,
+                SnowFlakeService.class)));
 
     }
 
